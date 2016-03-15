@@ -1,0 +1,176 @@
+﻿@{
+    ViewBag.Title = "Menu";
+    Layout = "~/Views/Shared/_EasyUI.cshtml";
+}
+
+<div id="tb" style="padding: 5px">
+    <div>
+        <a href="#" onclick="openDialog(0)" class="easyui-linkbutton" iconcls="icon-add" plain="true">新增</a>
+        <a href="#" onclick="openDialog(1)" class="easyui-linkbutton" iconcls="icon-edit" plain="true">编辑</a>
+        <a href="#" onclick="doDelete('/Sys/DelMenu','ID')" class="easyui-linkbutton" iconcls="icon-remove" plain="true">删除</a>
+    </div>
+</div>
+<table id="grid" data-options="
+                rownumbers: true,
+                idField:'ID',
+                treeField:'MenuName',
+                url: '/GridData/Menu',
+                method: 'post',
+                loadMsg: '正在加载中。。。',
+                remoteSort: false,
+                toolbar: '#tb',
+                fitColumns: true,
+                fit:true
+    ">
+    <thead>
+        <tr>
+            <th data-options="field:'ck',checkbox:true"></th>
+            <th data-options="field:'ID',sortable:true,width:100">菜单ID</th>
+            <th data-options="field:'MenuName',width:100">菜单名称</th>
+            <th data-options="field:'MenuUrl',width:100">菜单连接</th>
+            <th data-options="field:'OrderNo',sortable:true,width:100">菜单排序</th>
+            <th data-options="field:'Status',width:80,formatter: function (value) { return value==1 ? '启用' : '关闭'}">
+                菜单状态
+            </th>
+        </tr>
+    </thead>
+</table>
+<div id="dd" class="easyui-dialog" data-options="
+                width: 400,
+                height: 300,
+                closed: false,
+                cache: false,
+                resizable:true,
+                modal:true,
+                toolbar: [{
+                    text: '保存',
+                    iconCls: 'icon-edit',
+                    handler: function () { saveForm()}
+                }]">
+    <div style="padding: 10px 0 10px 60px">
+        <form id="forminfo" action="/Sys/AddMenu" method="post">
+            <table>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="hidden" id="ID" name="ID" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        上级菜单:
+                    </td>
+                    <td>
+                        <input class="easyui-combotree" id="ParentId" name="ParentId" data-options="url:'/OptData/Menu',method:'post'" validtype="selectValue['请选父菜单节点','Menu_ParentId']" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        菜单名:
+                    </td>
+                    <td>
+                        <input class="easyui-validatebox" type="text" id="MenuName" name="MenuName" maxlength="50" data-options="required:true" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        菜单URL:
+                    </td>
+                    <td>
+                        <input class="easyui-validatebox" type="text" id="MenuUrl" name="MenuUrl" data-options="required:true" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        菜单状态:
+                    </td>
+                    <td>
+                        <select id="Status" name="Status" class="easyui-combobox" required="true"
+                                data-options="editable:false,panelHeight:'auto'">
+                            <option value="1">开启</option>
+                            <option value="2">禁用</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        排序:
+                    </td>
+                    <td>
+                        <input type="number" id="OrderNo" name="OrderNo" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#grid').treegrid();
+        $('#dd').dialog('close');
+        $('#forminfo').form({
+            onSubmit: function () {
+                return $('#forminfo').form('validate');
+            },
+            success: function (data) {
+                var data = eval('(' + data + ')');  // change the JSON string to javascript object
+                if (data.result) {
+                    $.messager.alert("提示", "操作成功", "info", function () {
+                        $("#dd").dialog("close");
+                        clearForm();
+                        $('#grid').treegrid("reload");
+                    });
+                }
+                else {
+                    $.messager.alert('提示', '操作失败！', 'info');
+                }
+            }
+        });
+    })
+    var uptype = 0;
+    function openDialog(type) {
+        uptype = type;
+        var bt = '新增'
+        clearForm();
+        if (type == 1) {
+            var rows = $('#grid').treegrid('getSelections');
+            if (rows.length <= 0 || rows.length > 1) {
+                $.messager.alert('提示', '请选择一条记录进行编辑！', 'info');
+                return;
+            }
+            bt = '编辑';
+            initForm(rows[0]);
+        }
+        $('#ParentId').combotree('reload');
+        $('#dd').dialog({
+            title: bt
+        });
+    }
+    function saveForm() {
+        if (uptype == 0) {
+            $('#forminfo').form('submit', {
+                url: '/Sys/AddMenu'
+            });
+            return;
+        }
+        $('#forminfo').form('submit', {
+            url: '/Sys/UpdateMenu'
+        });
+    }
+    function initForm(info) {
+        $('#ID').val(info.ID);
+        $('#MenuName').val(info.MenuName);
+        $('#MenuUrl').val(info.MenuUrl);
+        $('#OrderNo').val(info.OrderNo);
+        $('#Status').val('setValue', info.Status);
+        $('#ParentId').combotree('setValue', info.ParentId);
+    }
+    function clearForm() {
+        $('#ID').val(0);
+        $('#MenuName').val('');
+        $('#MenuUrl').val('');
+        $('#OrderNo').val('');
+        $('#ParentId').combotree('clear');
+    }
+</script>
+

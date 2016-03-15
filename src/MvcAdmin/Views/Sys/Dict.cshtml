@@ -1,0 +1,188 @@
+﻿@{
+    ViewBag.Title = "Dict";
+    Layout = "~/Views/Shared/_EasyUI.cshtml";
+}
+
+<div class="easyui-layout" fit="true">
+    <div data-options="region:'west',title:'字典类型',split:true" style="width: 200px;">
+        <ul id="tt" class="easyui-tree"></ul>
+
+    </div>
+    <div data-options="region:'center'">
+        <div id="tb" style="padding: 5px">
+            <div style="margin-bottom: 5px">
+                <a href="#" onclick="openDialog(0)" class="easyui-linkbutton" iconcls="icon-add" plain="true">新增</a>
+                <a href="#" onclick="openDialog(1)" class="easyui-linkbutton" iconcls="icon-edit" plain="true">编辑</a>
+                <a href="#" onclick="doDelete('/Sys/DelDict','ID')" class="easyui-linkbutton" iconcls="icon-remove" plain="true">删除</a>
+            </div>
+            <div>
+                <input type="text" id="keyword" />
+                <a href="#" onclick="getGrid()" class="easyui-linkbutton" iconcls="icon-search">Search</a>
+            </div>
+        </div>
+        <table id="grid" title="字典" data-options="rownumbers: true,
+                url: '/GridData/Dict',
+                method: 'post',
+                loadMsg: '正在加载中。。。',
+                remoteSort: false,
+                toolbar: '#tb',
+                fitColumns: true,
+                pagination: true,
+                pageSize: 10,
+                pageNumber: 1">
+            <thead>
+                <tr>
+                    <th data-options="field:'ck',checkbox:true"></th>
+                    <th data-options="field:'ID',width:100">字典ID</th>
+                    <th data-options="field:'DictName',width:100">字典名称</th>
+                    <th data-options="field:'ClassName',width:100">所属类型</th>
+                    <th data-options="field:'DictNo',width:100">编码</th>
+                    @*<th data-options="field:'Dict_Order',sortable:true,width:100">排序</th>*@
+                </tr>
+            </thead>
+        </table>
+        <div id="dd" class="easyui-dialog" data-options="width: 400,
+                height: 300,
+                closed: false,
+                cache: false,
+                resizable:true,
+                modal:true,
+                toolbar: [{
+                    text: '保存',
+                    iconCls: 'icon-edit',
+                    handler: function () { saveForm()}
+                }]">
+            <div style="padding: 10px 0 10px 60px">
+                <form id="forminfo" action="/Sys/AddDict" method="post">
+                    <table>
+                        <tr>
+                            <td>
+                                <input type="hidden" id="Dict_Id" name="ID" />
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                所属类型:
+                            </td>
+                            <td>
+                                <input class="easyui-combotree" id="Class_Id" name="ClassId" data-options="url:'/OptData/DictClass',method:'post'" validtype="selectValue['请选中子节点','ID']" />
+                            </td>
+                        </tr>
+                        <tr id="passtr">
+                            <td>
+                                字典名称:
+                            </td>
+                            <td>
+                                <input class="easyui-validatebox" type="text" id="Dict_Name" name="DictName" data-options="required:true" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                备注/编码:
+                            </td>
+                            <td>
+                                <input class="easyui-validatebox" type="text" id="Dict_No" name="DictNo" />
+                            </td>
+                        </tr>
+                        @*<tr id="repasstr">
+                            <td>
+                                排序:
+                            </td>
+                            <td>
+                                <input class="easyui-validatebox" type="number" id="Dict_Order" name="Dict_Order" data-options="required:true" />
+                            </td>
+                        </tr>*@
+
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var cls = 0;
+    $(function () {
+        $('#tt').tree({
+            url: '/OptData/DictClass',
+            method: 'post',
+            onSelect: function (rows) {
+                if (rows.id == -1) return;
+                cls = rows.id;
+                getGrid();
+            }
+        });
+
+        getGrid();
+        $('#dd').dialog('close');
+        $('#forminfo').form({
+            onSubmit: function () {
+                return $('#forminfo').form('validate');
+                //return false;
+            },
+            success: function (data) {
+                var data = eval('(' + data + ')');  // change the JSON string to javascript object
+                if (data.result) {
+                    $.messager.alert("提示", "操作成功", "info", function () {
+                        $("#dd").dialog("close");
+                        clearForm();
+                        $('#grid').datagrid("reload");
+                    });
+                }
+                else {
+                    $.messager.alert('提示', '操作失败！', 'info');
+                }
+            }
+        });
+    })
+
+    function getGrid() {
+        var key = $("#keyword").val();
+        $('#grid').datagrid({
+            queryParams: { classid: cls, keyword: key }
+        });
+    }
+    var uptype = 0;
+    function openDialog(type) {
+        uptype = type;
+        var bt = '新增'
+        clearForm();
+        if (type == 1) {
+            var rows = $('#grid').datagrid('getSelections');
+            if (rows.length <= 0 || rows.length > 1) {
+                alert('请选择一条记录进行编辑'); return;
+            }
+            bt = '编辑';
+            initForm(rows[0]);
+        }
+        $('#dd').dialog({
+            title: bt
+        });
+    }
+    function saveForm() {
+        if (uptype == 0) {
+            $('#forminfo').form('submit', {
+                url: '/Sys/AddDict'
+            });
+            return;
+        }
+        $('#forminfo').form('submit', {
+            url: '/Sys/UpdateDict'
+        });
+    }
+
+    function initForm(info) {
+        $('#Dict_Id').val(info.ID);
+        $('#Dict_Name').val(info.DictName);
+        $('#Dict_No').val(info.DictNo);
+        $('#Class_Id').combotree('setValue', info.ClassId);
+        //$('#Dict_Order').val(info.Dict_Order);
+    }
+    function clearForm() {
+        $('#Dict_Id').val(0);
+        $('#Dict_Name').val('');
+        $('#Dict_No').val('');
+        //$('#Dict_Order').val(0);
+        $('#Class_Id').combotree('clear');
+    }
+</script>

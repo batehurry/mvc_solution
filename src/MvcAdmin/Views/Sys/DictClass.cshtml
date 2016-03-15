@@ -1,0 +1,154 @@
+﻿@{
+    ViewBag.Title = "字典类型";
+    Layout = "~/Views/Shared/_EasyUI.cshtml";
+}
+<div id="tb" style="padding: 5px">
+    <div style="margin-bottom: 5px">
+        <a href="#" onclick="openDialog(0)" class="easyui-linkbutton" iconcls="icon-add" plain="true">新增</a>
+        <a href="#" onclick="openDialog(1)" class="easyui-linkbutton" iconcls="icon-edit" plain="true">编辑</a>
+        <a href="#" onclick="doDelete('/Sys/DelDictClass','ID')" class="easyui-linkbutton" iconcls="icon-remove" plain="true">删除</a>
+    </div>
+    <div>
+        <input type="text" id="keyword" />
+        <a href="#" onclick="getGrid()" class="easyui-linkbutton" iconcls="icon-search">Search</a>
+    </div>
+</div>
+<table id="grid" title="字典类型" fit="true" data-options="
+                rownumbers: true,
+                url: '/GridData/DictClass',
+                method: 'post',
+                loadMsg: '正在加载中。。。',
+                remoteSort: false,
+                toolbar: '#tb',
+                fitColumns: true,
+                pagination: true,
+                pageSize: 10,
+                pageNumber: 1
+    ">
+    <thead>
+        <tr>
+            <th data-options="field:'ck',checkbox:true"></th>
+            <th data-options="field:'ID',width:100">类型编号</th>
+            <th data-options="field:'ClassName',width:100">字典类型</th>
+            <th data-options="field:'OrderNo',sortable:true,width:100">排序</th>
+        </tr>
+    </thead>
+</table>
+<div id="dd" class="easyui-dialog" data-options="
+                width: 400,
+                height: 300,
+                closed: false,
+                cache: false,
+                resizable:true,
+                modal:true,
+                toolbar: [{
+                    text: '保存',
+                    iconCls: 'icon-edit',
+                    handler: function () { saveForm()}
+                }]">
+    <div style="padding: 10px 0 10px 60px">
+        <form id="forminfo" action="/Sys/AddDictClass" method="post">
+            <table>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="hidden" id="Class_Id" name="ID" />
+                    </td>
+                </tr>
+                @*<tr>
+                    <td>父类型</td>
+                    <td>
+                        <input class="easyui-combotree" id="Class_ParentId" name="ParentId" data-options="url:'/OptData/DictClass',valueField:'id',panelHeight:'auto'" />
+                    </td>
+                </tr>*@
+                <tr>
+                    <td>
+                        字典类型:
+                    </td>
+                    <td>
+                        <input class="easyui-validatebox" id="Class_Name" name="ClassName" data-options="required:true" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        排序:
+                    </td>
+                    <td>
+                        <input type="number" id="Class_Order" name="OrderNo" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<script>
+    $(function () {
+        getGrid();
+        $('#dd').dialog('close');
+        $('#forminfo').form({
+            onSubmit: function () {
+                return $('#forminfo').form('validate');
+                //return false;
+            },
+            success: function (data) {
+                var data = eval('(' + data + ')');  // change the JSON string to javascript object
+                if (data.result) {
+                    $.messager.alert("提示", "操作成功", "info", function () {
+                        $("#dd").dialog("close");
+                        clearForm();
+                        $('#grid').datagrid("reload");
+                    });
+                }
+                else {
+                    $.messager.alert('提示', '操作失败！', 'info');
+                }
+            }
+        });
+    })
+
+    function getGrid() {
+        var key = $("#keyword").val();
+        $('#grid').datagrid({
+            queryParams: { keyword: key }
+        });
+    }
+    var uptype = 0;
+    function openDialog(type) {
+        uptype = type;
+        var bt = '新增'
+        clearForm();
+        if (type == 1) {
+            var rows = $('#grid').datagrid('getSelections');
+            if (rows.length <= 0 || rows.length > 1) {
+                alert('请选择一条记录进行编辑'); return;
+            }
+            bt = '编辑';
+            initForm(rows[0]);
+        }
+        $('#dd').dialog({
+            title: bt
+        });
+    }
+    function saveForm() {
+        if (uptype == 0) {
+            $('#forminfo').form('submit', {
+                url: '/Sys/AddDictClass'
+            });
+            return;
+        }
+        $('#forminfo').form('submit', {
+            url: '/Sys/UpdateDictClass'
+        });
+    }
+
+    function initForm(info) {
+        $('#Class_Id').val(info.Class_Id);
+        $('#Class_Name').val(info.Class_Name);
+        $('#Class_Order').val(info.Class_Order);
+    }
+    function clearForm() {
+        $('#Class_Id').val(0);
+        $('#Class_Name').val('');
+        $('#Class_Order').val(0);
+    }
+</script>

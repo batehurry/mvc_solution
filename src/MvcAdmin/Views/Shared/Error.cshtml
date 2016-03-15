@@ -1,0 +1,16 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "错误";
+}
+
+<hgroup class="title">
+    <h1 class="error">错误:@Model.Exception.GetType().Name</h1>
+    <h2 class="error">@Model.ControllerName @Model.ActionName 处理你的请求时出错。</h2>
+</hgroup>
+<div>
+    @Model.Exception.Message
+</div>
+<div>
+    @Model.Exception.StackTrace
+</div>

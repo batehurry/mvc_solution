@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+</head>
+<body>
+    <div id="divRead" style="padding: 10px">
+        <ul id="treeRole"></ul>
+    </div>
+    <script type="text/javascript">
+        var treemenu = $('#treeRole');
+        $(function () {
+            treemenu.tree({
+                url: '/OptData/RoleTree',
+                lines: true,
+                animate: true,
+                checkbox: true,
+                onLoadSuccess: function () {
+                    getInit(userid);
+                }
+            });
+        });
+        function getInit(id) {
+            $.ajax({
+                url: '/Sys/UserRole',
+                type: 'post',
+                data: {
+                    user: id
+                },
+                datatype: 'json',
+                success: function (data) {
+                    var data = result.data;
+                    if (data.length > 0) {
+                        $.each(data, function (i, item) {
+                            var node = treemenu.tree('find', item.RoleId);
+                            if (node != null && node != undefined)
+                                if (treemenu.tree('isLeaf', node.target)) {
+                                    treemenu.tree('check', node.target);
+                                }
+                        })
+                    }
+                }
+            })
+        }
+    </script>
+</body>
+</html>

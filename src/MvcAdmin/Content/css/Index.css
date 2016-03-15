@@ -1,0 +1,336 @@
+﻿body {
+    font: 12px/20px "微软雅黑", "宋体", Arial, sans-serif, Verdana, Tahoma;
+    padding: 0;
+    margin: 0;
+}
+
+body, ul, li {
+    padding: 0px;
+    margin: 0px;
+}
+
+ul, li {
+    list-style: none;
+}
+
+#desk li {
+    list-style: none;
+}
+
+#div1 {
+    position: relative;
+    overflow: auto;
+}
+
+.li {
+    position: absolute;
+}
+
+.STYLE1 {
+    color: #182D4A;
+    font-weight: bold;
+}
+
+.STYLE3 {
+    color: #000000;
+    font-weight: bold;
+}
+
+.STYLE4 {
+    color: #666666;
+}
+
+.SelectP {
+    background-image: url(/Content/images/zuo-bj.jpg);
+    vertical-align: middle;
+    background-repeat: repeat;
+    padding-top: 5px;
+    height: 25px;
+}
+
+#messagerRegion {
+    width: 100%;
+    height: 364px;
+    overflow: auto;
+}
+
+#msgul {
+    width: 400px;
+    padding: 10px;
+}
+
+    #msgul li {
+        height: 26px;
+        border-bottom: 1px #c0c0c0 dashed;
+        margin-bottom: 5px;
+    }
+
+        #msgul li a {
+            font-size: 14px;
+            float: left;
+            cursor: default;
+        }
+
+        #msgul li span {
+            float: right;
+            padding-right: 5px;
+            cursor: default;
+        }
+
+#msgAll {
+    padding-right: 10px;
+    text-align: right;
+    cursor: default;
+}
+
+#loading {
+    width: 100%;
+    height: 1000px;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    line-height: 700px;
+    z-index: 9999999;
+    background-color: #F5F7FA;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: none;
+}
+
+#header {
+    background: url(/Content/images/ajpt-kj_01.jpg) repeat-x;
+}
+
+#top1 {
+    height: 76px;
+    width: auto;
+    position: relative;
+}
+
+#top1left {
+    background: url(/Content/images/ajpt-kj_11.png) no-repeat;
+    width: 546px;
+    height: 49px;
+    position: absolute;
+    top: 10px;
+    left: 6px;
+}
+
+#top1right {
+    background: url(/Content/images/ajpt-kj_03.png) no-repeat;
+    width: 465px;
+    height: 28px;
+    position: absolute;
+    top: 0;
+    right: -10px;
+}
+
+#textTop1Right {
+    position: absolute;
+    top: 4px;
+    right: 50px;
+}
+
+#imgTop1Right {
+    background: url(/Content/images/ajpt-kj_06.png) no-repeat;
+    width: 16px;
+    height: 14px;
+    position: absolute;
+    top: 5px;
+    right: 78px;
+}
+
+#top2 {
+    background: url(/Content/images/ajpt-kj_14.png) repeat-x;
+    height: 38px;
+    width: auto;
+    position: relative;
+}
+
+#top2left {
+    position: absolute;
+    top: 4px;
+    left: 20px;
+}
+
+#top2right {
+    position: absolute;
+    top: 4px;
+    left: 200px;
+    width: 700px;
+}
+
+    #top2right ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        top: 3px;
+    }
+
+        #top2right ul li {
+            float: left;
+            width: 137px;
+            font-size: 16px;
+        }
+
+            #top2right ul li a:link {
+                color: #FFFFFF;
+                text-decoration: none;
+            }
+
+            #top2right ul li a:visited {
+                color: #FFFFFF;
+                text-decoration: none;
+            }
+
+            #top2right ul li a:hover {
+                color: #009966;
+                background: url(/Content/images/ajpt-kj_22.png);
+                font-weight: bold;
+            }
+
+            #top2right ul li a:active {
+                color: #33FFFF;
+            }
+
+            #top2right ul li a {
+                display: block;
+                height: 29px;
+                width: 137px;
+                line-height: 26px;
+                text-align: center;
+            }
+
+.layout-split-proxy-h {
+    position: absolute;
+    width: 2px;
+    background: #888;
+    font-size: 1px;
+    cursor: e-resize;
+    display: none;
+    z-index: 5;
+}
+
+.layout-split-north {
+    border-bottom: 5px solid #efefef;
+}
+
+.layout-split-south {
+    border-top: 5px solid #efefef;
+}
+
+.layout-split-east {
+    border-left: 0px solid #efefef;
+}
+
+.layout-split-west {
+    border-right: 0px solid #efefef;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:active {
+    text-decoration: none;
+}
+
+.cs-north {
+    height: 114px;
+}
+
+.cs-north-bg {
+    width: 100%;
+    height: 100%;
+    background: url(themes/gray/images/header_bg.png) repeat-x;
+}
+
+.cs-north-logo {
+    height: 40px;
+    margin: 15px 0px 0px 5px;
+    display: inline-block;
+    color: #000000;
+    font-size: 22px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.cs-west {
+    width: 180px;
+    padding: 0px;
+}
+
+.cs-navi-tab {
+    padding: 5px;
+}
+
+.cs-tab-menu {
+    width: 120px;
+}
+
+.cs-home-remark {
+    padding: 2px;
+}
+
+.wrapper {
+    float: right;
+    height: 30px;
+    margin-left: 10px;
+}
+
+.ui-skin-nav {
+    float: right;
+    padding: 0;
+    margin-right: 10px;
+    list-style: none outside none;
+    height: 30px;
+}
+
+    .ui-skin-nav .li-skinitem {
+        float: left;
+        font-size: 12px;
+        line-height: 30px;
+        margin-left: 10px;
+        text-align: center;
+    }
+
+        .ui-skin-nav .li-skinitem span {
+            cursor: pointer;
+            width: 10px;
+            height: 10px;
+            display: inline-block;
+        }
+
+            .ui-skin-nav .li-skinitem span.cs-skin-on {
+                border: 1px solid #FFFFFF;
+            }
+
+            .ui-skin-nav .li-skinitem span.gray {
+                background-color: gray;
+            }
+
+            .ui-skin-nav .li-skinitem span.default {
+                background-color: blue;
+            }
+
+            .ui-skin-nav .li-skinitem span.bootstrap {
+                background-color: #D7EBF9;
+            }
+
+            .ui-skin-nav .li-skinitem span.black {
+                background-color: black;
+            }
+
+            .ui-skin-nav .li-skinitem span.metro {
+                background-color: #FFE57E;
+            }

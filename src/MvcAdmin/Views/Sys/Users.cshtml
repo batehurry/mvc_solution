@@ -1,0 +1,289 @@
+﻿@{
+    ViewBag.Title = "User";
+    Layout = "~/Views/Shared/_EasyUI.cshtml";
+}
+
+
+<div id="tb" style="padding: 5px;">
+    <div style="margin-bottom: 5px">
+        <a href="#" onclick="openDialog(0)" class="easyui-linkbutton" iconcls="icon-add" plain="true">新增</a>
+        <a href="#" onclick="openDialog(1)" class="easyui-linkbutton" iconcls="icon-edit" plain="true">编辑</a>
+        <a href="#" onclick="doDelete('/Sys/DelUser','ID')" class="easyui-linkbutton" iconcls="icon-remove" plain="true">删除</a>
+        <a href="#" onclick="setRole()" class="easyui-linkbutton" iconcls="icon-add" plain="true">分配角色</a>
+        @*<a href="#" onclick="updatePwd()" class="easyui-linkbutton" iconcls="icon-edit" plain="true">修改密码</a>*@
+    </div>
+    <div>
+        <input type="text" id="keyword" />
+        <a href="#" onclick="getGrid()" class="easyui-linkbutton" iconcls="icon-search">Search</a>
+    </div>
+</div>
+<table id="grid" title="用户列表" fit="true">
+    <thead>
+        <tr>
+            <th data-options="field:'ck',checkbox:true"></th>
+            <th data-options="field:'UserName',width:100">用户名</th>
+            <th data-options="field:'CreateTime',width:100,align:'right',formatter: function (value){return dateFormat(value)} ">创建时间</th>
+            <th data-options="field:'Status',sortable:true,width:100,align:'right',formatter: function (value) { return value==1 ? '开通' : '冻结'}">状态</th>
+            <th data-options="field:'LastLogin',width:100,align:'right'">最近登录</th>
+        </tr>
+    </thead>
+</table>
+<div id="dd" class="easyui-dialog" data-options="title: '新增',
+                width: 400,
+                height: 300,
+                closed: false,
+                cache: false,
+                resizable:true,
+                modal:true,
+                toolbar: [{
+                    text: '保存',
+                    iconCls: 'icon-edit',
+                    handler: function () { saveForm()}
+                }]">
+    <div style="padding: 10px 0 10px 60px">
+        <form id="forminfo" action="/User/AddUser" method="post">
+            <table>
+                <tr>
+                    <td>
+                        用户名:
+                    </td>
+                    <td>
+                        <input class="easyui-validatebox" type="text" id="User_Name" name="UserName" maxlength="50" data-options="required:true"
+                               validtype="userNameVali['hid=op100','User_Name','User_Id','T_Sys_User','用户名已存在']" />
+                    </td>
+                </tr>
+                <tr id="passtr">
+                    <td>
+                        密码:
+                    </td>
+                    <td>
+                        <input class="easyui-validatebox" type="password" id="User_Pwd" name="UserPwd" data-options="required:true" validtype="length[6,12]" />
+                    </td>
+                </tr>
+                <tr id="repasstr">
+                    <td>
+                        确认密码:
+                    </td>
+                    <td>
+                        <input class="easyui-validatebox" type="password" id="reUserPwd" name="reUserPwd" data-options="required:true" validtype="equalTo['#User_Pwd']" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        状态:
+                    </td>
+                    <td>
+                        <input type="hidden" name="ID" id="User_Id" />
+                        <input type="hidden" name="Status" id="User_State" />
+                        <input type="radio" name="rdoState" id="rdoState1" checked="checked" value="1" /><label for="rdoState1" class="handCursor">开通</label>
+                        <input type="radio" name="rdoState" id="rdoState2" value="2" /><label for="rdoState2" class="handCursor">冻结</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="hidden" id="upt" value="0" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<div id="pwddlg">
+</div>
+<div id="roleDlg" class="easyui-dialog" data-options="iconCls:'icon-save',closed: true">
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#forminfo').form({
+            url: '/Sys/AddUser',
+            onSubmit: function () {
+                return $('#forminfo').form('validate');
+                //return false;
+            },
+            success: function (data) {
+                var data = eval('(' + data + ')');  // change the JSON string to javascript object
+                if (data.result) {
+                    $.messager.alert("提示", "操作成功", "info", function () {
+                        $("#dd").dialog("close");
+                        clearForm();
+                        $('#grid').datagrid("reload");
+                    });
+                }
+                else {
+                    $.messager.alert('提示', '操作失败！', 'info');
+                }
+            }
+        });
+        getGrid();
+        $('#dd').dialog('close');
+    });
+
+    function getGrid() {
+        var key = $("#keyword").val();
+        $('#grid').datagrid({
+            rownumbers: true,
+            url: '/GridData/Users',
+            queryParams: { keyword: key },
+            method: 'post',
+            loadMsg: "正在加载中。。。",
+            remoteSort: false,
+            toolbar: '#tb',
+            fitColumns: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber: 1
+        });
+    }
+    var uptype = 0;
+    function openDialog(type) {
+        uptype = type;
+        var bt = '新增';
+        if (type == 0) {
+            $('#passtr').show();
+            $('#repasstr').show();
+            clearForm();
+        }
+        if (type == 1) {
+            var rows = $('#grid').datagrid('getSelections');
+            if (rows.length <= 0 || rows.length > 1) {
+                alert('请选择一条记录进行编辑'); return;
+            }
+            bt = '编辑';
+            initForm(rows[0]);
+        }
+        $('#dd').dialog({
+            title: bt
+        });
+    }
+
+    function saveForm() {
+        if (uptype == 0) {
+            addUser();
+            return;
+        }
+        updateUser();
+    }
+
+    function addUser() {
+        //选中项
+        var state = $("input[name='rdoState']:checked").val();
+        $('#User_State').val(state);
+        $('#forminfo').form('submit', {
+            url: '/Sys/AddUser'
+        });
+    }
+
+    function updateUser() {
+        var state = $("input[name='rdoState']:checked").val();
+        $('#User_State').val(state);
+        $('#forminfo').form('submit', {
+            url: '/Sys/UpdateUser'
+        });
+    }
+    function clearForm() {
+        $('#upt').val(0);
+        $('#UserId').val('');
+        $('#User_Name').val('');
+        $('#User_Name').removeAttr('readonly');
+        $('#User_Pwd').val('123456');
+        $('#reUserPwd').val('123456');
+    }
+    function initForm(info) {
+        $('#upt').val(1);
+        $('#User_Id').val(info.ID);
+        $('#User_Name').val(info.UserName);
+        $('#User_Name').prop('readonly', 'readonly');
+        $('#User_Pwd').val('123456');
+        $('#reUserPwd').val('123456');
+        $('#passtr').hide();
+        $('#repasstr').hide();
+        $("[type='radio']").each(function () {
+            if ($(this).val() == info.Status) {
+                $(this).prop("checked", "checked");
+            }
+            else
+                $(this).removeAttr("checked");
+        });
+    }
+</script>
+<script type="text/javascript">
+        var userid = 0;
+        var roleDlg = $("#roleDlg");
+        function setRole() {
+            var rows = $('#grid').datagrid('getSelections');
+            if (rows.length <= 0 || rows.length > 1) {
+                $.messager.alert('提示', '请选择单个用户进行操作！', 'info'); return;
+            }
+            userid = rows[0].ID;
+            var treeMenu = $("#roleDlg #treeRole");
+            roleDlg.dialog({
+                title: '菜单',
+                width: 400,
+                height: 400,
+                closed: true,
+                cache: false,
+                href: "/Html/TreeUserRole.html?id=" + userid,
+                modal: true,
+                toolbar: [{
+                    text: '保存',
+                    iconCls: 'icon-save',
+                    handler: function () {
+                        var nodesCheck = $('#treeRole').tree('getChecked');
+                        var nodesParent = $('#treeRole').tree('getChecked', 'indeterminate');
+                        var nodes = new Array;
+                        if (nodesCheck) {
+                            $.each(nodesCheck, function (index) {
+                                if (this.id > 0) {
+                                    nodes.push(this.id);
+                                }
+                            });
+                            $.each(nodesParent, function (index) {
+                                if (this.id > 0) {
+                                    nodes.push(this.id);
+                                }
+                            });
+                        }
+                        upSet(userid, nodes);
+                    }
+                }]
+            });
+            roleDlg.dialog("open");
+        }
+
+        function upSet(uid, rid) {
+            $.ajax({
+                url: '/Sys/SetUserRole',
+                type: 'post',
+                data: {
+                    user: uid,
+                    role: rid
+                },
+                datatype: 'json',
+                success: function (data) {
+                    if (data.result) {
+                        $.messager.alert('提示', '操作成功！', 'info');
+                        roleDlg.dialog("close");
+                        return;
+                    }
+                    $.messager.alert('提示', '操作失败！', 'info');
+                }
+            })
+        }
+        function updatePwd() {
+            var rows = $('#grid').datagrid('getSelections');
+            if (rows.length <= 0 || rows.length > 1) {
+                $.messager.alert('提示', '请选择单个用户进行操作！', 'info'); return;
+            }
+            userid = rows[0].ID;
+            $('#pwddlg').dialog({
+                title: '修改用户密码',
+                width: 400,
+                height: 250,
+                closed: false,
+                cache: false,
+                href: "/Html/userpass.html",
+                modal: true
+            });
+        }
+</script>

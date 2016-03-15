@@ -1,0 +1,221 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>后台管理</title>
+    <link href="~/Content/EasyUI/themes/default/easyui.css" rel="stylesheet" />
+    <link href="~/Content/EasyUI/themes/icon.css" rel="stylesheet" />
+    <link href="~/Content/css/Index.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="~/Scripts/common/Common.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#divLeft").find("a").click(
+               function () {
+                   $("#divLeft").find("table").removeAttr("background");
+                   $(this).parent().parent().parent().parent().attr("background", "/Content/images/zuo-bj.jpg");
+               }
+            );
+        });
+        function selectPanel(idx) {
+            $('#divLeft').accordion('select', idx);
+        }
+    </script>
+</head>
+<body class="easyui-layout">
+    <div id="loading">
+        <p>正在加载中...</p>
+    </div>
+    <script type="text/javascript">
+        $("#loading").css({ display: "block" });
+        $("html").css("overflow", "hidden");
+        setTimeout(function () {
+            $("#loading").css("display", "none");
+            $("html").css("overflow", "");
+            //AjaxInfo();
+        }, 2000);
+    </script>
+    <div data-options="region:'north'" border="true" class="cs-north" style="overflow: hidden">
+
+        <div id="header">
+            <div id="top1">
+                <div id="top1left"></div>
+                <div id="top1right">
+                    <div id="textTop1Right">
+                        <span style="font-size: 12px; color: #004942;">
+                            <a onclick="newTabs('修改密码','/Account/Manage')">@ViewData["CurUser"]</a>
+                            ｜您当前有--待办任务<a href="#" onclick="newTabs('待办理','/HDFlow/ToDone')">
+                                <span id="todone"><font color="#FF0000">{0}</font></span>
+                            </a>项&nbsp;&nbsp;&nbsp;&nbsp;｜&nbsp;&nbsp;&nbsp;
+                        </span>
+                        <span style="font-size: 12px; color: #004942;"><a href="/Account/LogOff">注销</a></span>
+                    </div>
+                    <div id="imgTop1Right"></div>
+                </div>
+            </div>
+            <div id="top2">
+                @*<div id="top2left"><span style="font-size: 18px; color: #5bf5bf; font-weight: bold;"></span></div>
+                <div id="top2right">
+                    <ul>
+                        <li><a href="javascript:selectPanel(0)" onfocus="this.blur();">工作待办</a></li>
+                        <li><a href="javascript:selectPanel(1)" onfocus="this.blur();">综合查询</a></li>
+                        <li><a href="javascript:selectPanel(2)" onfocus="this.blur();">流程管理</a></li>
+                        <li><a href="javascript:selectPanel(3)" onfocus="this.blur();">系统管理</a></li>
+                    </ul>
+                </div>*@
+            </div>
+        </div>
+    </div>
+    <div data-options="region:'west',border:true" title="" class="cs-west">
+        <div id="divLeft" class="easyui-accordion" data-options="border: false, animate: true,fit:true">
+        </div>
+    </div>
+    <div id="mainPanle" data-options="region:'center'">
+        <div id="tabs" class="easyui-tabs" fit="true" border="false">
+            <div title="我的桌面" id="myDesktop" style="overflow: hidden; padding: 5px;">
+
+            </div>
+        </div>
+    </div>
+
+    <div data-options="region:'south'" border="false" id="south">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td height="25" align="center" valign="middle" background="/Content/images/ajpt-kj_75.png">
+                    <font color="#009287">技术支持：MicroSoft</font>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="mm" class="easyui-menu cs-tab-menu">
+        <div id="mm-tabupdate">
+            刷新
+        </div>
+        <div class="menu-sep">
+        </div>
+        <div id="mm-tabclose">
+            关闭
+        </div>
+        <div id="mm-tabcloseother">
+            关闭其他
+        </div>
+        <div id="mm-tabcloseall">
+            关闭全部
+        </div>
+    </div>
+    <div id="winRead" style="width: 100%; height: 100%; z-index: 9999;"></div>
+    <div id="divDlg" class="easyui-dialog" data-options="iconCls:'icon-save',closed: true"></div>
+    <script type="text/javascript">
+        $(function () {
+            GetAccordionMenu();
+            //missionCount();
+        });
+
+        var tempNode = 0;
+        //手风琴导航菜单
+        function GetAccordionMenu() {
+            var index = 0;
+            var html = "";
+            $.ajax({
+                url: '/Home/Menu',
+                type: 'post',
+                async: false,
+                cache: false,
+                data: {},
+                dataType: "json",
+                success: function (data) {
+                    //var titleJson = eval(data.rows); //children
+                    $.each(data, function (i, item) {
+                        html += "<div title='" + item["Title_Name"] + "'>\r\n";
+                        var chJson = eval(item["children"]);
+                        if (chJson != null && typeof (chJson[0]) != undefined) {
+                            html += GetSubmenu(chJson, 181);
+                        }
+                        html += "</div>\r\n";
+                    });
+                }
+            });
+            $("#divLeft").append(html);
+        }
+        //子菜单
+        function GetSubmenu(chJson, parntId) {
+            var html = "";
+            var className = tempNode == 0 ? " class=\"easyui-tree\"" : "";
+            html += "<ul" + className + ">\r\n";
+            $.each(chJson, function (i, item) {
+                //html += "<li data-options=\"iconCls:'icon-add'\">\r\n";
+                html += "<li>\r\n";
+                var zjdJson = eval(item["children"]);
+                if (zjdJson != undefined) {
+                    tempNode = 1;
+                    html += "<span>" + item["Menu_Name"] + "</span>\r\n";
+                    html += GetSubmenu(zjdJson, 0);
+                }
+                else {
+                    tempNode = 0;
+                    html += "<a href=\"javascript:void(0);\" src='" + item["Menu_Url"] + "' class='cs-navi-tab'>" + item["Menu_Name"] + "</a>";
+                }
+                html += "</li>\r\n";
+            });
+            html += "</ul>";
+            return html;
+        }
+        function changeDiv(showId, obj) {
+            $("[name='showTable']").hide();
+            $("#table" + showId).show();
+            $("[name='changeA']").removeClass("STYLE3");
+            $("[name='changeA']").parent().removeAttr("background");
+            $(obj).addClass("STYLE3");
+            $(obj).parent().attr("background", "/Content/images/img_1.jpg");
+            if (showId == 1)
+                $("#imgTitle").attr("src", "/Content/Images/ingdex_r9_c7.jpg");
+            else
+                $("#imgTitle").attr("src", "/Content/Images/ingdex_r9_c6.jpg");
+        }
+
+        function GetTop(iNow, i, aLi, aHeight) {
+            var step = Math.floor(i / 2);
+            if (!step) {
+                aLi[i].style.top = 0;
+            }
+            else {
+                var sum = 0;
+                for (var j = 0; j < step; j++) {
+                    if (iNow == 0)
+                        sum += aHeight.L[j] + 5;
+                    else
+                        sum += aHeight.C[j] + 5;
+                }
+                aLi[i].style.top = sum + 'px';
+            }
+        }
+        function iframeLoad(t, id) {
+            var src = $(t).attr("src");
+            if (src != undefined) {
+                var tempSrc = src.substr(0, src.lastIndexOf("&"));
+                var date = "&date=" + new Date();
+                src = tempSrc != "" ? (tempSrc + date) : (src + date);
+                $("#iframe" + id + "").attr("src", src);
+            }
+        }
+        function missionCount() {
+            $.ajax({
+                url: '/Home/Mission',
+                type: 'post',
+                success: function (data) {
+                    $('#todone').html('<font color="#FF0000">{' + data.todone + '}</font>');
+                    $('#done').html('<font color="#FF0000">{' + data.done + '}</font>');
+                }
+            });
+        }
+    </script>
+    <script src="~/Content/EasyUI/jquery.easyui.min.js"></script>
+    <script src="~/Scripts/common/Navigation.js"></script>
+</body>
+</html>
+
+

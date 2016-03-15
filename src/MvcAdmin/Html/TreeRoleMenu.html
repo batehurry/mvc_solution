@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+</head>
+<body>
+    <div id="divRead" style="padding: 10px">
+        <ul id="treeMenu"></ul>
+    </div>
+    <script type="text/javascript">
+        var treemenu = $('#treeMenu');
+        $(function () {
+            treemenu.tree({
+                url: '/OptData/Menu?state=1',
+                lines: true,
+                animate: true,
+                checkbox: true,
+                onLoadSuccess: function () {
+                    getInit(role);
+                }
+            });
+        });
+        function getInit(id) {
+            $.ajax({
+                url: '/Sys/RolesMenu',
+                type: 'post',
+                data: {
+                    role: id
+                },
+                datatype: 'json',
+                success: function (result) {
+                    var data = result.data;
+                    if (data.length > 0) {
+                        $.each(data, function (i, item) {
+                            //var node = tree.findNode(item.MenuId);
+                            //tree.setChecked(node);
+                            var node = treemenu.tree('find', item.MenuId);
+                            if (node != null && node != undefined)
+                                if (treemenu.tree('isLeaf', node.target)) {
+                                    treemenu.tree('check', node.target);
+                                }
+                        })
+                    }
+                }
+            })
+        }
+    </script>
+</body>
+</html>
