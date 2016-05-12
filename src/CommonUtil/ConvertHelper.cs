@@ -52,22 +52,6 @@ namespace CommonUtil
         }
 
         /// <summary>
-        /// 分页
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="pageidex"></param>
-        /// <param name="pagesize"></param>
-        /// <returns></returns>
-        public static IEnumerable<T> GetPage<T>(this IEnumerable<T> list, int pageidex, int pagesize)
-        {
-            if (pageidex <= 0 || pagesize <= 0)
-                return list;
-
-            return list.Skip((pageidex - 1) * pagesize).Take(pagesize);
-        }
-
-        /// <summary>
         /// Datable转换为IList
         /// </summary>
         /// <typeparam name="T"></typeparam>

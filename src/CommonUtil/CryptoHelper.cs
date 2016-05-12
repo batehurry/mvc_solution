@@ -10,19 +10,6 @@ namespace CommonUtil
     /// </summary>
     public class CryptoHelper
     {
-
-
-        /// <summary>
-        /// DES加解密的默认密钥
-        /// </summary>
-        public static string Key
-        {
-            get
-            {
-                return "!@#ASD12";
-            }
-        }
-
         #region 使用Get传输替换关键字符为全角和半角转换
         /// <summary>
         /// 使用Get传输替换关键字符为全角
@@ -50,6 +37,59 @@ namespace CommonUtil
             UrlParam = UrlParam.Replace("＆", "&");
             UrlParam = UrlParam.Replace("？", "?");
             return UrlParam;
+        }
+        #endregion
+
+        #region 通过HTTP传递的Base64编码
+        /// <summary>
+        /// 编码 通过HTTP传递的Base64编码
+        /// </summary>
+        /// <param name="source">编码前的</param>
+        /// <returns>编码后的</returns>
+        public static string HttpBase64Encode(string source)
+        {
+            //空串处理
+            if (source == null || source.Length == 0)
+            {
+                return "";
+            }
+
+            //编码
+            string encodeString = Convert.ToBase64String(Encoding.UTF8.GetBytes(source));
+
+            //过滤
+            encodeString = encodeString.Replace("+", "~");
+            encodeString = encodeString.Replace("/", "@");
+            encodeString = encodeString.Replace("=", "$");
+
+            //返回
+            return encodeString;
+        }
+
+        /// <summary>
+        /// 解码 通过HTTP传递的Base64解码
+        /// </summary>
+        /// <param name="source">解码前的</param>
+        /// <returns>解码后的</returns>
+        public static string HttpBase64Decode(string source)
+        {
+            //空串处理
+            if (source == null || source.Length == 0)
+            {
+                return "";
+            }
+
+            //还原
+            string deocdeString = source;
+            deocdeString = deocdeString.Replace("~", "+");
+            deocdeString = deocdeString.Replace("@", "/");
+            deocdeString = deocdeString.Replace("$", "=");
+
+            //Base64解码
+            deocdeString = Encoding.UTF8.GetString(Convert.FromBase64String(deocdeString));
+
+            //返回
+            return deocdeString;
         }
         #endregion
 
@@ -263,7 +303,16 @@ namespace CommonUtil
         #endregion
 
         #region  DES 加解密
-
+        /// <summary>
+        /// DES加解密的默认密钥
+        /// </summary>
+        public static string Key
+        {
+            get
+            {
+                return "!@#ASD12";
+            }
+        }
         /// <summary>
         /// Desc加密 Encoding.Default
         /// </summary>
@@ -382,61 +431,6 @@ namespace CommonUtil
             output = output.Replace("-", "");
             output = output.ToLower();
             return output;
-        }
-        #endregion
-
-        #region 通过HTTP传递的Base64编码
-        /// <summary>
-        /// 编码 通过HTTP传递的Base64编码
-        /// </summary>
-        /// <param name="source">编码前的</param>
-        /// <returns>编码后的</returns>
-        public static string HttpBase64Encode(string source)
-        {
-            //空串处理
-            if (source == null || source.Length == 0)
-            {
-                return "";
-            }
-
-            //编码
-            string encodeString = Convert.ToBase64String(Encoding.UTF8.GetBytes(source));
-
-            //过滤
-            encodeString = encodeString.Replace("+", "~");
-            encodeString = encodeString.Replace("/", "@");
-            encodeString = encodeString.Replace("=", "$");
-
-            //返回
-            return encodeString;
-        }
-        #endregion
-
-        #region 通过HTTP传递的Base64解码
-        /// <summary>
-        /// 解码 通过HTTP传递的Base64解码
-        /// </summary>
-        /// <param name="source">解码前的</param>
-        /// <returns>解码后的</returns>
-        public static string HttpBase64Decode(string source)
-        {
-            //空串处理
-            if (source == null || source.Length == 0)
-            {
-                return "";
-            }
-
-            //还原
-            string deocdeString = source;
-            deocdeString = deocdeString.Replace("~", "+");
-            deocdeString = deocdeString.Replace("@", "/");
-            deocdeString = deocdeString.Replace("$", "=");
-
-            //Base64解码
-            deocdeString = Encoding.UTF8.GetString(Convert.FromBase64String(deocdeString));
-
-            //返回
-            return deocdeString;
         }
         #endregion
 

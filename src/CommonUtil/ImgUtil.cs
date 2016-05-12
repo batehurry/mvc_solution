@@ -11,7 +11,7 @@ namespace CommonUtil
     /// <summary>
     /// 图片裁剪缩放
     /// </summary>
-    public class ImgSmall
+    public class ImgUtil
     {
         #region 正方型裁剪并缩放
         /// <summary>

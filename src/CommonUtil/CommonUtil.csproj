@@ -92,28 +92,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseHelper.cs" />
+    <Compile Include="AsyncTaskManager.cs" />
+    <Compile Include="CodeUtil.cs" />
     <Compile Include="BigInteger.cs" />
     <Compile Include="CacheHelper.cs" />
     <Compile Include="ConfigHelper.cs" />
     <Compile Include="ConvertHelper.cs" />
     <Compile Include="CryptoHelper.cs" />
     <Compile Include="DefaultSettings.cs" />
-    <Compile Include="ExcelHelper.cs" />
+    <Compile Include="ExcelUtil.cs" />
     <Compile Include="Extensions\EnumExtension.cs" />
     <Compile Include="Extensions\ObjectExtension.cs" />
     <Compile Include="Extensions\QueryableExtension.cs" />
     <Compile Include="HttpGet.cs" />
-    <Compile Include="ImgSmall.cs" />
-    <Compile Include="LogHelper.cs" />
+    <Compile Include="ImgUtil.cs" />
+    <Compile Include="LogUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedisHelper.cs" />
-    <Compile Include="RemarkAttribute.cs" />
     <Compile Include="RSAHelper.cs" />
     <Compile Include="SendMail.cs" />
     <Compile Include="SqlHelper.cs" />
     <Compile Include="MSSqlHelper.cs" />
-    <Compile Include="Time_Task.cs" />
     <Compile Include="TypeConvert.cs" />
     <Compile Include="VerifyCode.cs" />
   </ItemGroup>

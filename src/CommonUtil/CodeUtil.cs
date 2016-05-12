@@ -3,19 +3,8 @@ using System.Web;
 
 namespace CommonUtil
 {
-    public class BaseHelper
+    public class CodeUtil
     {
-        /// <summary>
-        /// 获取当前请求的主机头地址
-        /// </summary>
-        public static string HostUrl
-        {
-            get
-            {
-                return "http://"+HttpContext.Current.Request.Url.Host;
-            }
-        }
-
         #region 生成唯一值
         /// <summary>
         /// 获取新的GUID值
@@ -174,26 +163,6 @@ namespace CommonUtil
                 get
                 {
                     return "JFB" + GenerateIntID();
-                }
-            }
-            /// <summary>
-            /// 获取专业版积分宝兑换单号
-            /// </summary>
-            public static string CpJiFengPayNo
-            {
-                get
-                {
-                    return "JFCP" + GenerateIntID();
-                }
-            }
-            /// <summary>
-            /// 麦包包兑换流水单号
-            /// </summary>
-            public static string CpMaiBBPayNo
-            {
-                get
-                {
-                    return "MBB" + GenerateIntID();
                 }
             }
             /// <summary>

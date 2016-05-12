@@ -3,12 +3,9 @@ using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace CommonUtil
@@ -16,7 +13,7 @@ namespace CommonUtil
     /// <summary>
     /// 操作Excel
     /// </summary>
-    public class ExcelHelper
+    public class ExcelUtil
     {
         /// <summary>
         /// DataTable导出到Excel文件

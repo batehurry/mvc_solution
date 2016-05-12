@@ -50,7 +50,7 @@ namespace CommonUtil
             }
             catch (Exception ex)
             {
-                LogHelper.WriteException("邮件发送失败", ex);
+                LogUtil.WriteException("邮件发送失败", ex);
                 return false;
             }
         }
@@ -107,7 +107,7 @@ namespace CommonUtil
             }
             catch (Exception ex)
             {
-                LogHelper.WriteException("邮件发送失败", ex);
+                LogUtil.WriteException("邮件发送失败", ex);
                 return false;
             }
         }
@@ -164,7 +164,7 @@ namespace CommonUtil
             }
             catch (Exception ex)
             {
-                LogHelper.WriteException("邮件发送失败", ex);
+                LogUtil.WriteException("邮件发送失败", ex);
                 return false;
             }
         }
