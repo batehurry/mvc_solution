@@ -44,7 +44,7 @@ namespace MvcAdmin.Controllers
         #region 查询数据
 
         //用户拥有的角色
-        [JsonException]
+        [ActionError]
         public JsonResult UserRole(int user)
         {
             var result = new OperateResult();
@@ -64,7 +64,7 @@ namespace MvcAdmin.Controllers
         }
 
         //角色拥有的菜单权限
-        [JsonException]
+        [ActionError]
         public JsonResult RolesMenu(int role)
         {
             var result = new OperateResult();
@@ -86,7 +86,7 @@ namespace MvcAdmin.Controllers
         #endregion
 
         #region 菜单操作
-        [JsonException]
+        [ActionError]
         public JsonResult AddMenu(Entity.sys_menu model)
         {
             var data = new OperateResult();
@@ -94,7 +94,7 @@ namespace MvcAdmin.Controllers
             data.result = service.Create(model);
             return Json(data);
         }
-        [JsonException]
+        [ActionError]
         public JsonResult UpdateMenu(Entity.sys_menu model)
         {
             var data = new OperateResult();
@@ -103,7 +103,7 @@ namespace MvcAdmin.Controllers
             data.result = service.Update(model);
             return Json(data);
         }
-        [JsonException]
+        [ActionError]
         public JsonResult DelMenu(int idList)
         {
             var data = new OperateResult();
@@ -117,7 +117,7 @@ namespace MvcAdmin.Controllers
         #endregion
 
         #region 角色操作
-        [JsonException]
+        [ActionError]
         public JsonResult AddRole(Entity.sys_role model)
         {
             var data = new OperateResult();
@@ -125,7 +125,7 @@ namespace MvcAdmin.Controllers
             data.result = service.Create(model);
             return Json(data);
         }
-        [JsonException]
+        [ActionError]
         public JsonResult UpdateRole(Entity.sys_role model)
         {
             var data = new OperateResult();
@@ -133,7 +133,7 @@ namespace MvcAdmin.Controllers
             data.result = service.Update(model);
             return Json(data);
         }
-        [JsonException]
+        [ActionError]
         public JsonResult DelRole(List<int> idList)
         {
             var data = new OperateResult();
@@ -170,7 +170,7 @@ namespace MvcAdmin.Controllers
 
         #region 用户操作
 
-        [JsonException]
+        [ActionError]
         public JsonResult AddUser(Entity.sys_user model)
         {
             var data = new OperateResult();
@@ -179,7 +179,7 @@ namespace MvcAdmin.Controllers
             data.result = service.Create(model);
             return Json(data);
         }
-        [JsonException]
+        [ActionError]
         public JsonResult UpdateUser(Entity.sys_user model)
         {
             var data = new OperateResult();
@@ -187,7 +187,7 @@ namespace MvcAdmin.Controllers
             data.result = service.Update(model);
             return Json(data);
         }
-        [JsonException]
+        [ActionError]
         public JsonResult DelUser(List<int> idList)
         {
             var data = new OperateResult();
@@ -206,7 +206,7 @@ namespace MvcAdmin.Controllers
 
         #region 字典操作
 
-        [JsonException]
+        [ActionError]
         public JsonResult AddDict(Entity.sys_dict model)
         {
             var data = new OperateResult();
@@ -214,7 +214,7 @@ namespace MvcAdmin.Controllers
             data.result = service.Create(model);
             return Json(data);
         }
-        [JsonException]
+        [ActionError]
         public JsonResult UpdateDict(Entity.sys_dict model)
         {
             var data = new OperateResult();
@@ -222,7 +222,7 @@ namespace MvcAdmin.Controllers
             data.result = service.Update(model);
             return Json(data);
         }
-        [JsonException]
+        [ActionError]
         public JsonResult DelDict(List<int> idList)
         {
             var data = new OperateResult();
@@ -241,7 +241,7 @@ namespace MvcAdmin.Controllers
 
         #region 字典类型操作
 
-        [JsonException]
+        [ActionError]
         public JsonResult AddDictClass(Entity.sys_dictclass model)
         {
             var data = new OperateResult();
@@ -249,7 +249,7 @@ namespace MvcAdmin.Controllers
             data.result = service.CreateClass(model);
             return Json(data);
         }
-        [JsonException]
+        [ActionError]
         public JsonResult UpdateDictClass(Entity.sys_dictclass model)
         {
             var data = new OperateResult();
@@ -257,7 +257,7 @@ namespace MvcAdmin.Controllers
             data.result = service.UpdateClass(model);
             return Json(data);
         }
-        [JsonException]
+        [ActionError]
         public JsonResult DelDictClass(List<int> idList)
         {
             var data = new OperateResult();

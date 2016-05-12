@@ -37,7 +37,7 @@ namespace MvcAdmin.Filters
             var ticket = System.Web.Security.FormsAuthentication.Decrypt(cookie.Value);
             string role = ticket.UserData;
 
-            CommonUtil.LogHelper.WriteInfo(string.Format("当前操作需要角色:{0};当前用户（{1}）拥有角色:{2}",
+            CommonUtil.LogUtil.WriteInfo(string.Format("当前操作需要角色:{0};当前用户（{1}）拥有角色:{2}",
                 string.Join(",",Roles),
                 httpContext.User.Identity.Name,
                 role));

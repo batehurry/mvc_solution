@@ -15,6 +15,7 @@ namespace Services
         protected List<T> GetPage<T>(IQueryable<T> source, int pageSize, int pageIndex, out int total)
         {
             total = source.Count();
+            //pageCount = total % pageSize == 0 ? (total / pageSize) : (total / pageSize + 1);
             return source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
         }
 

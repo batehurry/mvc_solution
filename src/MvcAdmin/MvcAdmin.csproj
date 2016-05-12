@@ -174,7 +174,8 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OptDataController.cs" />
     <Compile Include="Controllers\SysController.cs" />
-    <Compile Include="Filters\JsonExceptionAttribute.cs" />
+    <Compile Include="Filters\ActionLogAttribute.cs" />
+    <Compile Include="Filters\ActionErrorAttribute.cs" />
     <Compile Include="Filters\ExceptionFilterAttribute.cs" />
     <Compile Include="Filters\RequireHttpsAttribute.cs" />
     <Compile Include="Filters\RoleAuthorizeAttribute.cs" />

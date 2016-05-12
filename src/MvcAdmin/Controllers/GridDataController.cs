@@ -11,7 +11,7 @@ namespace MvcAdmin.Controllers
 {
     public class GridDataController : Controller
     {
-        [JsonException]
+        [ActionError]
         public JsonResult Menu()
         {
             var service = Ioc.GetService<IMenuService>();
@@ -34,7 +34,7 @@ namespace MvcAdmin.Controllers
             };
             return Json(result);
         }
-        [JsonException]
+        [ActionError]
         public JsonResult Role(int page,int rows)
         {
             var service = Ioc.GetService<IRoleService>();
@@ -54,7 +54,7 @@ namespace MvcAdmin.Controllers
             };
             return Json(data);
         }
-        [JsonException]
+        [ActionError]
         public JsonResult Users(int page, int rows)
         {
             var service = Ioc.GetService<IUserService>();
@@ -76,7 +76,7 @@ namespace MvcAdmin.Controllers
             };
             return Json(data);
         }
-        [JsonException]
+        [ActionError]
         public JsonResult Dict(int page, int rows)
         {
             var type = Convert.ToInt32(Request.Params["class"]);
@@ -110,7 +110,7 @@ namespace MvcAdmin.Controllers
             };
             return Json(data);
         }
-        [JsonException]
+        [ActionError]
         public JsonResult DictClass(int page, int rows)
         {
             var service = Ioc.GetService<IDictClassService>();

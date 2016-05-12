@@ -3,20 +3,17 @@ using System.Web.Mvc;
 
 namespace MvcAdmin.Filters
 {
-    public class JsonExceptionAttribute : HandleErrorAttribute
+    public class ActionErrorAttribute : HandleErrorAttribute
     {
         public override void OnException(ExceptionContext filterContext)
         {
             if (!filterContext.ExceptionHandled)
             {
                 //返回异常JSON
-                filterContext.Result = new JsonResult
+                filterContext.Result = new Models.ApiResult
                 {
-                    Data = new MvcAdmin.Models.OperateResult
-                    {
-                        result = false,
-                        info = filterContext.Exception.Message
-                    }
+                    Status=Models.ApiResultType.FAIL,
+                    Message=filterContext.Exception.Message
                 };
                 filterContext.ExceptionHandled = true;
             }
