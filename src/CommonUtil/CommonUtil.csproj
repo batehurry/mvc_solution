@@ -96,7 +96,7 @@
     <Compile Include="CodeUtil.cs" />
     <Compile Include="BigInteger.cs" />
     <Compile Include="CacheHelper.cs" />
-    <Compile Include="ConfigHelper.cs" />
+    <Compile Include="ConfigManager.cs" />
     <Compile Include="ConvertHelper.cs" />
     <Compile Include="CryptoHelper.cs" />
     <Compile Include="DefaultSettings.cs" />

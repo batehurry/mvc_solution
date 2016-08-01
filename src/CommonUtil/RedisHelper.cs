@@ -16,7 +16,7 @@ namespace CommonUtil
         {
             if (redisCli == null)
             {
-                string conn = ConfigHelper.GetSetting("RedisSetting");
+                string conn = ConfigManager.GetSetting("RedisSetting");
                 var set = conn.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
                 redisCli = new RedisClient(set[0], Convert.ToInt32(set[1]), set[2], Convert.ToInt32(set[3]));
             }
@@ -83,9 +83,9 @@ namespace CommonUtil
         {
             if (clientManager == null)
             {
-                var readWriteHost = ConfigHelper.GetSetting("RedisRWHost").Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-                var readOnlyHost = ConfigHelper.GetSetting("RedisRHost").Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-                var defaultDb = Convert.ToInt32(ConfigHelper.GetSetting("RedisDefaultDb"));
+                var readWriteHost = ConfigManager.GetSetting("RedisRWHost").Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                var readOnlyHost = ConfigManager.GetSetting("RedisRHost").Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                var defaultDb = Convert.ToInt32(ConfigManager.GetSetting("RedisDefaultDb"));
                 clientManager = CreateManager(readWriteHost, readOnlyHost, defaultDb);
             }
             return clientManager;
