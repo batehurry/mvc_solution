@@ -10,7 +10,8 @@ namespace MvcAdmin
         {
             filters.Add(new HandleErrorAttribute());
             filters.Add(new ExceptionFilterAttribute());
-            //filters.Add(new JsonExceptionAttribute());
+            filters.Add(new ModelValidateAttribute());//全局注册验证参数
+            //filters.Add(new ActionLogAttribute());
         }
     }
 }

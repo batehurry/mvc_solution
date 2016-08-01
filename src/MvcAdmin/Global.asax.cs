@@ -26,47 +26,6 @@ namespace MvcAdmin
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             Infrastructure.Ioc.RegisterInheritedTypes(typeof(Services.BaseService).Assembly, typeof(Services.BaseService));
-            //log4net.Config.XmlConfigurator.Configure();//获取Log4Net配置信息(配置信息定义在Web.config文件中)
-
-            //通过线程池开启一个线程，从队列中获取数据
-            /*ThreadPool.QueueUserWorkItem(o =>
-            {
-                while (true)
-                {
-                    try
-                    {
-                        if (ExceptionFilterAttribute.redisClent.GetListCount("Error") > 0)
-                        {
-                            //var name = MyExceptionAttribute.redisClent.Get<string>("name");
-                            var errorMsg = ExceptionFilterAttribute.redisClent.DequeueItemFromList("Error");
-                            //if (!string.IsNullOrEmpty(name)){
-                            //    ILog logger = LogManager.GetLogger("RunInfo");
-                            //    logger.Info(name);//将异常信息写到Log4Net中. 
-                            //    MyExceptionAttribute.redisClent.Remove("name");
-                            //}
-                            if (!string.IsNullOrEmpty(errorMsg))
-                            {
-                                //ILog logger = LogManager.GetLogger("RunError");
-                                //logger.Error(errorMsg);//将异常信息写到Log4Net中. 
-                                LogHelper.WriteError(errorMsg);
-
-                            }
-                            else
-                            {
-                                Thread.Sleep(30);//避免CPU空转。
-                            }
-                        }
-                        else
-                        {
-                            Thread.Sleep(30);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        ExceptionFilterAttribute.redisClent.EnqueueItemOnList("Error", ex.ToString());
-                    }
-                }
-            });*/
         }
     }
 }

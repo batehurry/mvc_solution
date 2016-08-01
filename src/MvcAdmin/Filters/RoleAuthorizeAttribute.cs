@@ -72,10 +72,6 @@ namespace MvcAdmin.Filters
             {
                 var result = new JsonResult();
                 result.Data = "您没有操作权限！";
-                //日志
-                //CommonUtil.LogHelper.WriteInfo(string.Format("用户：{0}-请求：{1}-没有操作权限",
-                //    filterContext.RequestContext.HttpContext.User.Identity.Name,
-                //    filterContext.RequestContext.HttpContext.Request.Url.ToString()));
                 result.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
                 filterContext.Result = result;
             }

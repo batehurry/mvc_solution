@@ -177,6 +177,8 @@
     <Compile Include="Filters\ActionLogAttribute.cs" />
     <Compile Include="Filters\ActionErrorAttribute.cs" />
     <Compile Include="Filters\ExceptionFilterAttribute.cs" />
+    <Compile Include="Filters\ModelValidateAttribute.cs" />
+    <Compile Include="Filters\PassValidateAttribute.cs" />
     <Compile Include="Filters\RequireHttpsAttribute.cs" />
     <Compile Include="Filters\RoleAuthorizeAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -585,6 +587,7 @@
     <Content Include="Html\TreeUserRole.html" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="packages.config">
       <SubType>Designer</SubType>

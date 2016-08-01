@@ -9,9 +9,9 @@ namespace MvcAdmin.Filters
         /// 运行时间
         /// </summary>
         //private Stopwatch timer;
-        private Dictionary<string, object> dict = null;
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            var dict = new Dictionary<string, object>();
             var param = filterContext.ActionParameters;
             dict = new Dictionary<string, object>();
             dict.Add("UserHostAddress", filterContext.HttpContext.Request.UserHostAddress);
@@ -24,12 +24,14 @@ namespace MvcAdmin.Filters
                 }
                 dict.Add("Params", param);
             }
-            //LogUtil.WriteInfo(filterContext.ActionDescriptor.ActionName, dict);
+            CommonUtil.LogUtil.WriteInfo(filterContext.ActionDescriptor.ActionName, dict);
             base.OnActionExecuting(filterContext);
         }
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
+            var dict = new Dictionary<string, object>();
+            dict.Add("Url", filterContext.HttpContext.Request.Url.ToString());
             dict.Add("Result", filterContext.Result);
             CommonUtil.LogUtil.WriteInfo("接口请求日志", dict);
             base.OnActionExecuted(filterContext);

@@ -47,5 +47,11 @@ namespace MvcAdmin.Controllers
                         }).ToList();
             return list.Count > 0 ? list : null;
         }
+
+        //[Filters.PassValidate]
+        public ActionResult Test(RegisterModel model)
+        {
+            return Content(DateTime.Now.ToString());
+        }
     }
 }
